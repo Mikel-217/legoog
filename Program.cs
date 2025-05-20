@@ -127,8 +127,9 @@ public class GetMetaData
             {
                 if (line.Contains(titleParam))
                 {
-                    data.title = getPlainText(line); // later set it to the Title of the class Data
+                    data!.title = getPlainText(line); // later set it to the Title of the class Data
                 }
+                data!.keyword = keyWord(file);
                 getOtherMetaData(file);
             }
         }
@@ -136,6 +137,21 @@ public class GetMetaData
         {
             Debug.WriteLine(e.Message);
         }
+    }
+
+    // TODO: update it, so it counts all words and then sets the keyword
+    private string keyWord(string file)
+    {
+        try
+        {
+
+            return "";
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine(e.Message);
+        }
+        return "";
     }
 
     // searchs for the other data
@@ -157,7 +173,6 @@ public class GetMetaData
         insertNewSearchResult();
     }
 
-    // TODO: update it, so it counts all words and then sets the keyword
 
     // checks if the line contains keyword --> gets higher keywordcount 
     private void containsKeyWord(string line)
