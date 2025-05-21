@@ -72,7 +72,7 @@ public class GetMetaData
             var lines = content.Split(new[] { "r\n", "\n" }, StringSplitOptions.None);
             foreach (var line in lines)
             {
-
+                
             }
 
             return "";

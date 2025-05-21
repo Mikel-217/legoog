@@ -1,9 +1,4 @@
-﻿using System.Buffers.Binary;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Runtime.ExceptionServices;
-using System.Data.SqlClient;
-using legoog.Models;
+﻿using legoog.Models;
 using legoog.Services;
 using legoog.Services.DB;
 
@@ -15,6 +10,9 @@ public class PMAin
     // just for testing --> gets replaced as soon as there is a web project :)
     public static void Main()
     {
+        const string pathconst = @"C:\tmp\crawlerdata\";
+        if(!Directory.Exists(pathconst)) Directory.CreateDirectory(pathconst);
+
         Crawler cr = new Crawler();
         GetMetaData meta = new GetMetaData();
         Thread crTH = new Thread(() => cr.startCrawler());
