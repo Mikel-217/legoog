@@ -15,6 +15,7 @@ public class PMAin
 
         Crawler cr = new Crawler();
         GetMetaData meta = new GetMetaData();
+        
         Thread crTH = new Thread(() => cr.startCrawler());
         Thread metaTH = new Thread(() => meta.startMetadata());
         crTH.Start();
