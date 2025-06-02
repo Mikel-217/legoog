@@ -1,8 +1,4 @@
-using System.Buffers.Binary;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Runtime.ExceptionServices;
-using System.Data.SqlClient;
 using legoog.Models;
 using legoog.Services;
 using legoog.Services.DB;
@@ -16,7 +12,6 @@ public class GetMetaData
     private DBService? dBService;
     const string pathconst = @"C:\tmp\crawlerdata\";
     const string titleParam = "<title";
-    const string connectionString = @"";
     string[] otherParam = { "<p", "<a", "<h1", "<h2", "<h3", "<h4", "<h5", "<h6", "<i" };
 
 
@@ -50,8 +45,7 @@ public class GetMetaData
                     data!.title = getPlainText(line); // later set it to the Title of the class Data
                 }
             }
-            data!.keyword = data!.title;
-            // data!.keyword = keyWord(file); // for later use 
+            keyWord(file); 
             getOtherMetaData(file);
         }
         catch (Exception e)
@@ -61,10 +55,9 @@ public class GetMetaData
     }
 
     // TODO: update it, so it counts all words and then sets the keyword
-    private string keyWord(string file)
+    private void keyWord(string file)
     {
-        List<string> keywords = new();
-
+        data.keyword = new();
         try
         {
             using StreamReader sr = new StreamReader(file);
@@ -72,16 +65,17 @@ public class GetMetaData
             var lines = content.Split(new[] { "r\n", "\n" }, StringSplitOptions.None);
             foreach (var line in lines)
             {
-                
+                if (line.Contains("<h1"))
+                {
+                    string key = getPlainText(line);
+                    data.keyword.Add(key);
+                }
             }
-
-            return "";
         }
         catch (Exception e)
         {
             Debug.WriteLine(e.Message);
         }
-        return "";
     }
 
     // searchs for the other data
@@ -101,7 +95,7 @@ public class GetMetaData
                 }
             }
         }
-        dBService!.insertNewSearchResult();
+        // dBService.searchData.Add()
         deleteChachedFile(file);
     }
 
@@ -109,9 +103,12 @@ public class GetMetaData
     // checks if the line contains keyword --> gets higher keywordcount 
     private void containsKeyWord(string line)
     {
-        if (line.Contains(data!.keyword!))
-        {
-            data.keywordCount++;
+        foreach (var keywords in data!.keyword!) {
+            
+            if (line.Contains(keywords))
+            {
+                data.keywordCount++;
+            }
         }
     }
 

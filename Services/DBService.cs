@@ -1,45 +1,25 @@
 using System.Data.Common;
 using legoog.Services;
 using legoog.Models;
-using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace legoog.Services.DB;
 
-public class DBService 
+public class DBService : DbContext
 {
-    private Data? data;
+    
+    public DbSet<Data> searchData { get; set; }
 
-    // later safe it in a ressource file
-    string connectionString = @"";
-
-    private SqlConnection sqlConn()
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        try
-        {
-            SqlConnection conn = new SqlConnection(connectionString);
-            conn.Open();
-            return conn;
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-
+        base.OnConfiguring(optionsBuilder); // Add db config
     }
 
 
-    public void insertNewSearchResult()
-    {
-        // write DB Connection and insert all data    
-        var dbCon = sqlConn();
-        dbCon.CreateCommand();
-        dbCon.Close();
-    }
+    // TODO:
 
-
-    // public Data getSearch()
-    // {
-    //     return null; 
-    // }
+    // dotnet ef migrations add Data
+    // dotnet ef update database
 
 }
